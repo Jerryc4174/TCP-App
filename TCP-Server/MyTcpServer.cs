@@ -23,7 +23,8 @@ namespace TCP_Server
         /// </summary>
         /// <param name="ipAddress">Default at loopback IP (Cannot be accessed from the outside world)</param>
         /// <param name="port"></param>
-        public MyTcpServer(string ipAddress = "127.0.0.1", int port = 8083)
+        //public MyTcpServer(string ipAddress = "127.0.0.1", int port = 8083)
+        public MyTcpServer(string ipAddress = "10.1.19.1", int port = 3000)
         {
             _ipAddress = ipAddress;
             _port = port;
@@ -108,6 +109,11 @@ namespace TCP_Server
         protected virtual void OnMessageReceived(string message)
         {
             MessageReceived?.Invoke(this, message);
+        }
+
+        private void DisplayPacketInformation(byte[] buffer)
+        {
+
         }
     }
 }
