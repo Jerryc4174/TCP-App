@@ -11,8 +11,10 @@ namespace TCP_Server
         private TcpListener _server;
         private readonly string _ipAddress;
         private readonly int _port;
+        
 
         public event EventHandler<string> MessageReceived;
+        public NetworkStream _stream;
 
         public int Port => _port;
 
@@ -25,6 +27,11 @@ namespace TCP_Server
         {
             _ipAddress = ipAddress;
             _port = port;
+            
+        }
+        public NetworkStream GetStream()
+        {
+            return _stream;
         }
 
         public async Task Start()
@@ -45,8 +52,10 @@ namespace TCP_Server
             {
                 // Handle new client connection
                 TcpClient client = await _server.AcceptTcpClientAsync();
+
                 OnMessageReceived($"Connected! Client IP: {client.Client.RemoteEndPoint}");
                 _ = HandleClientAsync(client);
+                _stream = client.GetStream();
             }
         }
 

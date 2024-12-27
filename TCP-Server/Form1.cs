@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TCP_Server
 {
@@ -10,6 +13,9 @@ namespace TCP_Server
     {
         private MyTcpServer _server;
         private bool _serverConnected = false;
+        private NetworkStream _stream;
+
+        
 
         public Form1()
         {
@@ -31,6 +37,8 @@ namespace TCP_Server
             {
                 logTextBox.AppendText(message + Environment.NewLine);
             }));
+
+            
 
             // Check if message contains LED ON/OFF commands
             if (message.Contains("LED ON"))
@@ -87,6 +95,27 @@ namespace TCP_Server
 
             return ips[0];
         }
-        
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            _stream = _server.GetStream();
+
+            string[] digits = sndmsgBox.Text.Split(' ')
+               .ToArray();
+            byte[] byteArray = new byte[digits.Length];
+            for(int i=0; i < byteArray.Length;i++)
+            {
+                byteArray[i] = Convert.ToByte(digits[i]);
+            }
+            //int intValue = Convert.ToInt32(hexString, 16);
+            //Console.WriteLine(intValue); // Output: 6719
+
+            if (_stream != null)
+            {
+                //byte[] msg = Encoding.UTF8.GetBytes( sndmsgBox.Text + Environment.NewLine) ;
+                //_stream.Write(msg, 0, msg.Length);
+                _stream.Write(byteArray, 0, byteArray.Length);
+            }
+        }
     }
 }
